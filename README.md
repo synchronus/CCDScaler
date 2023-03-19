@@ -29,9 +29,9 @@ followed by a prompt for the scale value
 
 ```Enter an integer scale value: 16```
 
-Which will then scale all FITS images in that folder by the number entered. Once done, the prompt will display a list of the locations of all new FITS files that were created.
+Which will then scale all FITS images in that folder by the number entered. The CMD tool uses multithreading to speed things up tremendously.
 
-TODO: Some form of progress indicator, try/catch for mistyped directory paths
+TODO: Try/catch for directory misreads
 
 
 ## The GUI Tool
