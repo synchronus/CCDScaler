@@ -5,7 +5,7 @@ from astropy.io import fits
 directory = input("Enter the directory path: ")
 
 # Set the constant to multiply the FITS files by
-constant = input("Enter an integer scale value: ")
+constant = int(input("Enter an integer scale value: "))
 
 # Initialize a list to store the modified file names
 modified_files = []
