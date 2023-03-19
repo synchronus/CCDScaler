@@ -29,3 +29,15 @@ followed by a prompt for the scale value
 Which will then scale all FITS images in that folder by the number entered. Once done, the prompt will display a list of the locations of all new FITS files that were created.
 
 TODO: Some form of progress indicator, try/catch for mistyped directory paths
+
+
+## The GUI Tool
+NOTE: This tool is very much early stages and I have not tested every possible use case or issue (i.e., checks for available storage, corrupted FITS handling, etc.)
+
+<img width="170" alt="Screenshot 2023-03-19 125100" src="https://user-images.githubusercontent.com/16050999/226191803-a0911495-47f7-4d84-8bc8-64d60caa6e86.png">
+
+The tool is very simple. You pick a scale factor (from 1 to 32), select a directory containing your FITS files, and the utility goes to work. There is a rudimentary status indicator at the bottom to indicate progress, but it's extremely buggy and rarely works properly until the tool is finished its scaling process. Once done, the tool will display a list of all modified files and their respective locations
+
+<img width="309" alt="Screenshot 2023-03-19 125537" src="https://user-images.githubusercontent.com/16050999/226192103-391de697-8e2a-489d-966a-507da8155e04.png">
+
+At some point, I'd like to change the layout so that instead of asking for a scale factor, it asks for the bit-depth of the camera used, or maybe pull the information from the FITS container of the first light frame. I'd also like to add some kind of progress bar, as this tool can take some time on large batches of files.
