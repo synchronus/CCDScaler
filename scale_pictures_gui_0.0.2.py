@@ -34,7 +34,7 @@ def scale_images(directory):
 
     # Initialize a list to store the modified file names
     modified_files = []
-    scale_factor = scale.get()
+    scale_factor = 2**(16-scale.get())
 
     # Recursively search through all subdirectories for FITS files
     for root, dirs, files in os.walk(directory):
@@ -80,7 +80,7 @@ scale_label = tk.Label(root, text="Scale Factor:")
 scale_label.grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
 
 # Add a scale widget for selecting the scale factor
-scale = Scale(root, from_=1, to=32, resolution=1, orient=tk.HORIZONTAL)
+scale = Scale(root, from_=10, to=16, resolution=2, orient=tk.HORIZONTAL)
 scale.set(16)
 scale.grid(row=0, column=1, padx=10, pady=10, sticky=tk.W)
 
