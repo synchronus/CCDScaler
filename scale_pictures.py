@@ -39,8 +39,9 @@ def scale_fits_files(scale_value, folder_path):
         list(tqdm(pool.imap_unordered(scale_fits_file, file_list), total=len(file_list), desc="Scaling files"))
 
 if __name__ == '__main__':
-    # Prompt the user for the scale value and folder location
-    scale_value = int(input("Enter scale integer value: "))
+    # Prompt the user for the bit-depth of camera and folder location
+    camera_bits = int(input("Enter Camera Sensor Bit-depth (12, 14, etc.) "))
+    scale_value = 2**(16-camera_bits) # scale image to 16-bit container. If images are already 16-bit, it's scaled by 1 so no damage done.
     folder_path = input("Enter folder location: ")
 
     scale_fits_files(scale_value, folder_path)
