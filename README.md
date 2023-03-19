@@ -4,9 +4,12 @@ A python tool to scale 12 and 14-bit FITS files to fit into their 16-bit contain
 Some Touptek model cameras don't have a firmware-level scalar to extend their 12-bit and 14-bit images to fill the entirety of brightness values available in a 16-bit FITS container. While N.I.N.A. and Astrophotography tool do this automatically, KStars/Ekos does not due to a preference of caution when modifying files after capture, which I respect. In the spirit of that, this tool WILL NOT overwrite original data, instead creating an entirely new folder tree identical to the folder setup of the original files, with each new scaled file having '_m' appended on the filename (indicating "modified").
 
 ## Prerequisites
-This tool uses the AstroPy library for both command-line and GUI tools. If AstroPy is not installed, you can do so by using PIP
+This tool uses the AstroPy and tqdm libraries for both command-line and GUI tools. If either are not installed, you can do so by using PIP
 
 ```user@localhost:~$ pip install AstroPy```
+
+```user@localhost:~$ pip install tqdm```
+
 
 The GUI tool makes use of the TKinter library, which is not ideal but functional.
 
