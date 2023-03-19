@@ -1,47 +1,47 @@
 import os
-from astropy.io import fits
+import shutil
+import astropy.io.fits as fits
+from tqdm import tqdm
+from multiprocessing import Pool, cpu_count
 
-# Prompt the user to enter a directory path
-directory = input("Enter the directory path: ")
+def scale_fits_file(args):
+    filename, root, output_root, scale_value = args
+    if filename.endswith('.fits') or filename.endswith('.fit'):
+        # Open the input file
+        with fits.open(os.path.join(root, filename)) as hdul:
+            # Scale the data
+            hdul[0].data *= scale_value
 
-# Set the constant to multiply the FITS files by
-constant = int(input("Enter an integer scale value: "))
+            # Create the output filename with "_m" appended to the stem
+            filename_parts = os.path.splitext(filename)
+            output_filename = os.path.join(output_root, filename_parts[0] + "_m" + filename_parts[1])
 
-# Initialize a list to store the modified file names
-modified_files = []
+            # Save the scaled data to a new file in the output directory
+            hdul.writeto(output_filename, overwrite=True)
 
-# Recursively search through all subdirectories for FITS files
-for root, dirs, files in os.walk(directory):
-    # Check if any FITS files are present in the current directory
-    if any(filename.lower().endswith('.fits') or filename.lower().endswith('.fit') for filename in files):
-        # Construct the new root directory called "scaled"
-        new_root = os.path.join(directory, "scaled")
-        # Replicate the subdirectory structure of the original directory tree
-        for dir_name in os.path.relpath(root, directory).split(os.sep):
-            new_root = os.path.join(new_root, dir_name)
-            os.makedirs(new_root, exist_ok=True)
-        # Loop through all the FITS files in the current directory
+def scale_fits_files(scale_value, folder_path):
+    # Define the output directory path
+    output_folder_path = os.path.join(os.path.dirname(folder_path), "scaled")
+
+    # Loop over all files and directories within the input folder
+    file_list = []
+    for root, dirs, files in os.walk(folder_path):
+        # Create the corresponding output directory within the output folder
+        output_root = os.path.join(output_folder_path, os.path.relpath(root, folder_path))
+        os.makedirs(output_root, exist_ok=True)
+
+        # Collect all FITS files in the current directory
         for filename in files:
-            if filename.lower().endswith('.fits') or filename.lower().endswith('.fit'):
-                # Open the FITS file
-                with fits.open(os.path.join(root, filename)) as hdul:
-                    # Get the data from the FITS file
-                    data = hdul[0].data
-                    # Multiply the data by the constant
-                    data *= constant
-                    # Save the modified data back to the FITS file
-                    hdul[0].data = data
-                    # Construct the new filename with "_m" appended
-                    new_filename = filename[:-5] + '_m.fits' if filename.lower().endswith('.fits') else filename[:-4] + '_m.fits'
-                    # Save the modified FITS file in the "scaled" directory
-                    hdul.writeto(os.path.join(new_root, new_filename), overwrite=True)
-                    # Add the new filename to the list of modified files
-                    modified_files.append(os.path.join(new_root, new_filename))
+            file_list.append((filename, root, output_root, scale_value))
 
-# Print a list of the modified files
-if modified_files:
-    print("The following files were modified:")
-    for filename in modified_files:
-        print(filename)
-else:
-    print("No FITS files were found in the specified directory.")
+    # Scale the FITS files using multiple processes
+    with Pool(processes=cpu_count()) as pool:
+        list(tqdm(pool.imap_unordered(scale_fits_file, file_list), total=len(file_list), desc="Scaling files"))
+
+if __name__ == '__main__':
+    # Prompt the user for the scale value and folder location
+    scale_value = int(input("Enter scale integer value: "))
+    folder_path = input("Enter folder location: ")
+
+    scale_fits_files(scale_value, folder_path)
+
