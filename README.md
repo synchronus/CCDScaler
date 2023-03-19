@@ -21,15 +21,15 @@ The CMD tool should just run by calling it from a python prompt
 
 ```user@localhost:~$ python scale_pictures.py```
 
-Which will then prompt for a directory path
-
-```Enter the directory path: C:\Users\User1\Pictures\M74\```
-
 followed by a prompt for the scale value
 
-```Enter an integer scale value: 16```
+```Enter Camera Sensor Bit-depth (12, 14, etc.): 12```
 
-Which will then scale all FITS images in that folder by the number entered. The CMD tool uses multithreading to speed things up tremendously.
+Which will then prompt for a directory path
+
+```Enter folder location: C:\Users\User1\Pictures\M74\```
+
+Which will then scale all FITS images in that folder to fit the 16-bit file size. The CMD tool uses multithreading to speed things up tremendously.
 
 TODO: Try/catch for directory misreads
 
